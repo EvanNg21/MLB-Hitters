@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 from ipywidgets import Dropdown, interact, DatePicker, widgets, interactive_output
 from PIL import Image
 from scipy.ndimage import gaussian_filter
@@ -21,6 +23,37 @@ if csv_files:
     data = pd.read_csv(file_to_read)
 else:
     print("No CSV files found in the data directory.")
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+strikeZone = matplotlib.patches.Rectangle((-0.708,1.3), 1.416, 1.8, color='red')
+ax.add_patch(strikeZone)
+
+plt.xlim([-3.5,3.5])
+plt.ylim([-2,6])
+ax.set_aspect('equal')
+ax.grid(True)
+manager = plt.get_current_fig_manager()
+manager.window.state("zoomed")
+plt.show()
+
+#plot functions________________________________________________________________________________________________________________________________________
+def on_plot():
+    date = date_var.get()
+    pitch_type = pitch_type.get()
+    pitch_call = pitch_call.get()
+    pitch_result = pitch_result.get()
+    plot_data(date, pitch_type, pitch_call, pitch_result)
+
+def plot_data(date,pitch_type,pitch_call,pitch_result):
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.xlim([-4,4])
+    ax.ylim([-4,4])
+    pass
 
 #Selection Window______________________________________________________________________________________________________________________________________
 player = data['player_name'].iloc[0]
@@ -81,7 +114,8 @@ pitch_result_dropdown = ttk.Combobox(
 pitch_result_dropdown.current(0)
 pitch_result_dropdown.grid(row=4, column=1, padx=10, pady=10)
 
-plot_button = ttk.Button(frame, text="Plot")
+plot_button = ttk.Button(frame, text="Plot", command=on_plot)
 plot_button.grid(row=5, column=0, columnspan=2)
+
 
 root.mainloop()

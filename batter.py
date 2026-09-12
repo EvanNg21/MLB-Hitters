@@ -32,7 +32,7 @@ strikeZone = matplotlib.patches.Rectangle((-0.708,1.3), 1.416, 1.8, color='red')
 ax.add_patch(strikeZone)
 
 plt.xlim([-3.5,3.5])
-plt.ylim([-2,6])
+plt.ylim([-1,6])
 ax.set_aspect('equal')
 ax.grid(True)
 manager = plt.get_current_fig_manager()

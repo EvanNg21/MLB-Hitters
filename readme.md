@@ -46,7 +46,7 @@ This project was created to practice working with baseball data, data filtering,
 
 Work Examples
 
-![Dataset Selection](imgs/image2.png)
+![Dataset Selection](imgs/image.png)
 ![Batter Info 1](imgs/image2.png)
 ![Batter Info 2](imgs/image3.png)
 ![Plot 1](imgs/image4.png)

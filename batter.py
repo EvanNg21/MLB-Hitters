@@ -95,6 +95,20 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
                     'Knuckle Curve': '#6236cd', 'Slow-Curve': '#0068ff', 'Slider': '#eee817', 'Sweeper': '#deb33a',
                     'Slurve': '#94afd5', 'Knuckleball': '#3c44cd'}
     colors = filtered_data['pitch_name'].map(pitch_colors).fillna('#000000')
+
+    if pitcher_hand == "Both":
+        pSide = filtered_data['p_throws'].map({
+            'R': 'red',
+            'L': 'blue'
+        }).fillna('#000000')
+    else:
+        if pitcher_hand == "R":
+            pSide = 'red'
+        elif pitcher_hand == "L":
+            pSide = 'blue'
+        else:
+            pSide = '#000000'
+
     ax.add_patch(strikeZone)
     ax.add_patch(ground)
     ax.add_patch(plate1)
@@ -120,7 +134,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"Pitch-Result: {pitch_result}"),
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"Pitcher-Handedness: {pitcher_hand}")
     ]
-    ax.scatter(filtered_data['plate_x'], filtered_data['plate_z'], marker='o', s=207, linewidth=0.5, edgecolor='black', c=colors, zorder=5, picker=True)
+    ax.scatter(filtered_data['plate_x'], filtered_data['plate_z'], marker='o', s=207, linewidth=0.5, edgecolor=pSide, c=colors, zorder=5, picker=True)
     legend1 = ax.legend(handles=legend_handles, loc='center left', bbox_to_anchor=(1, 0.5))
     legend2 = ax.legend(handles=legend_handles2, loc='center right', bbox_to_anchor=(-0.1, 0.5))
     ax.add_artist(legend1)

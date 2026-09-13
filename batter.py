@@ -62,7 +62,7 @@ def on_plot():
     pitcher_hand = pitcher_hand_var.get()
     plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand)
 
-#plot function
+#plot function______________________________________________________________________________________________________________________________________________
 def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     fig = plt.figure()
     ax = fig.add_subplot(111)

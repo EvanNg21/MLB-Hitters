@@ -89,7 +89,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     strikeZone = matplotlib.patches.Rectangle((-0.708, bottomZone), 1.416, zoneHeight, color='red', zorder=10, alpha=0.4)
     pitch_colors = {'4-Seam Fastball': '#d22d49', 'Sinker': '#fe9e00', 'Cutter': '#943f2c', 'Changeup': '#1dbe3a',
                     'Split-Finger': '#3badad', 'Forkball': '#55ccac', 'Screwball': '#60db33', 'Curveball': '#00d1ee',
-                    'Knuckle-Curve': '#6236cd', 'Slow-Curve': '#0068ff', 'Slider': '#eee817', 'Sweeper': '#deb33a',
+                    'Knuckle Curve': '#6236cd', 'Slow-Curve': '#0068ff', 'Slider': '#eee817', 'Sweeper': '#deb33a',
                     'Slurve': '#94afd5', 'Knuckleball': '#3c44cd'}
     colors = filtered_data['pitch_name'].map(pitch_colors).fillna('#000000')
     ax.add_patch(strikeZone)
@@ -102,7 +102,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     plt.ylim([-0.5,5])
     plt.xticks(np.arange(-3.5, 3.51, 0.5))
     plt.yticks(np.arange(-0.5, 5.1, 0.5))
-    plt.title(f"Pitch Map for {data['player_name'].iloc[0]}")
+    plt.title(f"Pitch Map for {data['player_name'].iloc[0]}, BatterSide: {data['stand'].iloc[0]}")
     plt.xlabel("Horizontal Distance (feet)")
     plt.ylabel("Vertical Distance (feet)")
     legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=(f"{pitch} : {len(filtered_data[filtered_data['pitch_name'] == pitch])}")) for pitch, color in pitch_colors.items()] + [plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other")]
@@ -137,12 +137,13 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
         pitcher_names = dict(zip(mlbids['MLBAMID'], mlbids['Name']))
         pitcher_id = filtered_data['pitcher'].iloc[ind]
         pitcher_name = pitcher_names.get(pitcher_id, "Unknown")
+        
         annotation = ax.annotate(
             f"Date: {row['game_date']}\n"
-            f"Pitcher: {pitcher_name}\n"
-            f"Pitch_Hand: {row['p_throws']}\n"
+            f"Pitcher: {pitcher_name} ({row['p_throws']}HP)\n"
             f"Pitch: {row['pitch_name']}\n"
-            f"Speed: {row['release_speed']}\n"
+            f"Velocity: {row['release_speed']}\n"
+            f"Count/Pitch#: {row['balls']}-{row['strikes']} / {row['pitch_number']}\n"
             f"Pitch_Call: {row['description']}\n"
             f"Pitch_Result: {row['events']}\n",
             xy=(row['plate_x'], row['plate_z']),

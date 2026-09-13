@@ -122,7 +122,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     plt.ylim([-0.5,5])
     plt.xticks(np.arange(-3.5, 3.51, 0.5))
     plt.yticks(np.arange(-0.5, 5.1, 0.5))
-    plt.title(f"Pitch Map for {data['player_name'].iloc[0]}, BatterSide: {data['stand'].iloc[0]}")
+    plt.title(f"Pitch Map for {data['player_name'].iloc[0]}, {data['home_team'].iloc[0]},  BatterSide: {data['stand'].iloc[0]}")
     plt.xlabel("Horizontal Distance (feet)")
     plt.ylabel("Vertical Distance (feet)")
     legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=(f"{pitch} : {len(filtered_data[filtered_data['pitch_name'] == pitch])}")) for pitch, color in pitch_colors.items()] + [plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other")]
@@ -157,10 +157,11 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
         pitcher_names = dict(zip(mlbids['MLBAMID'], mlbids['Name']))
         pitcher_id = filtered_data['pitcher'].iloc[ind]
         pitcher_name = pitcher_names.get(pitcher_id, "Unknown")
-        
+        pitcher_teams = dict(zip(mlbids['MLBAMID'], mlbids['Team']))
+        pitcher_team = pitcher_teams.get(pitcher_id, "Unknown")
         annotation = ax.annotate(
             f"Date: {row['game_date']}\n"
-            f"Pitcher: {pitcher_name} ({row['p_throws']}HP)\n"
+            f"Pitcher: {pitcher_team}, {pitcher_name} ({row['p_throws']}HP)\n"
             f"Pitch: {row['pitch_name']}\n"
             f"Velocity: {row['release_speed']}\n"
             f"Count/Pitch#: {row['balls']}-{row['strikes']} / {row['pitch_number']}\n"

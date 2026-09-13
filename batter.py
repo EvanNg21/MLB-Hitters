@@ -84,8 +84,8 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
         )
     ]
 
-    total_pitches = len(filtered_data) 
-                        
+    total_pitches = len(filtered_data)
+        
     strikeZone = matplotlib.patches.Rectangle((-0.708, bottomZone), 1.416, zoneHeight, color='red', zorder=10, alpha=0.4)
     pitch_colors = {'4-Seam Fastball': '#d22d49', 'Sinker': '#fe9e00', 'Cutter': '#943f2c', 'Changeup': '#1dbe3a',
                     'Split-Finger': '#3badad', 'Forkball': '#55ccac', 'Screwball': '#60db33', 'Curveball': '#00d1ee',
@@ -105,7 +105,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     plt.title(f"Pitch Map for {data['player_name'].iloc[0]}")
     plt.xlabel("Horizontal Distance (feet)")
     plt.ylabel("Vertical Distance (feet)")
-    legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=pitch) for pitch, color in pitch_colors.items()] + [plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other")]
+    legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=(f"{pitch} : {len(filtered_data[filtered_data['pitch_name'] == pitch])}")) for pitch, color in pitch_colors.items()] + [plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other")]
     legend_handles2 = [
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"# of PItches: {total_pitches}"),
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"Date: {date}"),

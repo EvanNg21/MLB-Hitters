@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, Polygon
 from ipywidgets import Dropdown, interact, DatePicker, widgets, interactive_output
 from PIL import Image
 from scipy.ndimage import gaussian_filter
@@ -87,12 +87,18 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     total_pitches = len(filtered_data)
         
     strikeZone = matplotlib.patches.Rectangle((-0.708, bottomZone), 1.416, zoneHeight, color='red', zorder=10, alpha=0.4)
+    ground = matplotlib.patches.Rectangle((-3.5, -0.5), 7, 0.55, color="#B1894CBD", zorder=1, alpha=1)
+    plate1 = matplotlib.patches.Rectangle((-0.708, -0.25), 1.416, 0.25, color='white', zorder=2, alpha=1)
+    plate2 = Polygon([(-0.708,-0.25), (0,-0.5), (0.708,-0.25)], facecolor='white', zorder=2, alpha=1)
     pitch_colors = {'4-Seam Fastball': '#d22d49', 'Sinker': '#fe9e00', 'Cutter': '#943f2c', 'Changeup': '#1dbe3a',
                     'Split-Finger': '#3badad', 'Forkball': '#55ccac', 'Screwball': '#60db33', 'Curveball': '#00d1ee',
                     'Knuckle Curve': '#6236cd', 'Slow-Curve': '#0068ff', 'Slider': '#eee817', 'Sweeper': '#deb33a',
                     'Slurve': '#94afd5', 'Knuckleball': '#3c44cd'}
     colors = filtered_data['pitch_name'].map(pitch_colors).fillna('#000000')
     ax.add_patch(strikeZone)
+    ax.add_patch(ground)
+    ax.add_patch(plate1)
+    ax.add_patch(plate2)
     ax.vlines(0.236, bottomZone, bottomZone+zoneHeight, color='red', zorder=11, alpha=0.5)
     ax.vlines(-0.236, bottomZone, bottomZone+zoneHeight, color='red', zorder=11, alpha=0.5)
     ax.hlines(bottomZone+zoneHeight/3, -0.708, 0.708, color='red', zorder=11, alpha=0.5)

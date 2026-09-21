@@ -86,7 +86,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
 
     total_pitches = len(filtered_data)
         
-    strikeZone = matplotlib.patches.Rectangle((-0.708, bottomZone), 1.416, zoneHeight, color='red', zorder=10, alpha=0.4)
+    strikeZone = matplotlib.patches.Rectangle((-0.708, bottomZone), 1.416, zoneHeight, color="#636060F9", zorder=10, alpha=0.5)
     ground = matplotlib.patches.Rectangle((-3.5, -0.5), 7, 0.55, color="#B1894CBD", zorder=1, alpha=1)
     plate1 = matplotlib.patches.Rectangle((-0.708, -0.25), 1.416, 0.25, color='white', zorder=2, alpha=1)
     plate2 = Polygon([(-0.708,-0.25), (0,-0.5), (0.708,-0.25)], facecolor='white', zorder=2, alpha=1)
@@ -113,10 +113,10 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     ax.add_patch(ground)
     ax.add_patch(plate1)
     ax.add_patch(plate2)
-    ax.vlines(0.236, bottomZone, bottomZone+zoneHeight, color='red', zorder=11, alpha=0.5)
-    ax.vlines(-0.236, bottomZone, bottomZone+zoneHeight, color='red', zorder=11, alpha=0.5)
-    ax.hlines(bottomZone+zoneHeight/3, -0.708, 0.708, color='red', zorder=11, alpha=0.5)
-    ax.hlines(bottomZone+2*zoneHeight/3, -0.708, 0.708, color='red', zorder=11, alpha=0.5)
+    ax.vlines(0.236, bottomZone, bottomZone+zoneHeight, color="#5E5C5CFC", zorder=11, alpha=0.5)
+    ax.vlines(-0.236, bottomZone, bottomZone+zoneHeight, color='#5E5C5CFC', zorder=11, alpha=0.5)
+    ax.hlines(bottomZone+zoneHeight/3, -0.708, 0.708, color='#5E5C5CFC', zorder=11, alpha=0.5)
+    ax.hlines(bottomZone+2*zoneHeight/3, -0.708, 0.708, color='#5E5C5CFC', zorder=11, alpha=0.5)
 
     plt.xlim([-3.5,3.5])
     plt.ylim([-0.5,5])
@@ -125,7 +125,25 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     plt.title(f"Pitch Map for {data['player_name'].iloc[0]}, {data['home_team'].iloc[0]},  BatterSide: {data['stand'].iloc[0]}")
     plt.xlabel("Horizontal Distance (feet)")
     plt.ylabel("Vertical Distance (feet)")
-    legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=(f"{pitch} : {len(filtered_data[filtered_data['pitch_name'] == pitch])}")) for pitch, color in pitch_colors.items()] + [plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other")]
+
+
+    legend_handles = []
+
+    for pitch, color in pitch_colors.items():
+        pitch_named = filtered_data[filtered_data['pitch_name'] == pitch]
+        total_pitches = len(pitch_named)
+
+        legend_handles.append(
+            plt.Line2D([0], [0], 
+                marker='o', 
+                color='w', 
+                markerfacecolor= color, 
+                markersize=10, 
+                label=(f"{pitch} : {total_pitches}")
+            )
+        )
+
+    legend_handles.append(plt.Line2D([0], [0], marker='o',markerfacecolor='black', color='w', markersize=10, label="Other"))
     legend_handles2 = [
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"# of PItches: {total_pitches}"),
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"Date: {date}"),

@@ -90,6 +90,8 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     ground = matplotlib.patches.Rectangle((-3.5, -0.5), 7, 0.55, color="#B1894CBD", zorder=1, alpha=1)
     plate1 = matplotlib.patches.Rectangle((-0.708, -0.25), 1.416, 0.25, color='white', zorder=2, alpha=1)
     plate2 = Polygon([(-0.708,-0.25), (0,-0.5), (0.708,-0.25)], facecolor='white', zorder=2, alpha=1)
+    bbox1 = matplotlib.patches.Rectangle((1.208, -0.5), 0.1, 0.5, color='white', zorder=2, alpha=1)
+    bbox2 = matplotlib.patches.Rectangle((-1.308, -0.5), 0.1, 0.5, color='white', zorder=2, alpha=1)
     pitch_colors = {'4-Seam Fastball': '#d22d49', 'Sinker': '#fe9e00', 'Cutter': '#943f2c', 'Changeup': '#1dbe3a',
                     'Split-Finger': '#3badad', 'Forkball': '#55ccac', 'Screwball': '#60db33', 'Curveball': '#00d1ee',
                     'Knuckle Curve': '#6236cd', 'Slow-Curve': '#0068ff', 'Slider': '#eee817', 'Sweeper': '#deb33a',
@@ -113,6 +115,8 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     ax.add_patch(ground)
     ax.add_patch(plate1)
     ax.add_patch(plate2)
+    ax.add_patch(bbox1)
+    ax.add_patch(bbox2)
     ax.vlines(0.236, bottomZone, bottomZone+zoneHeight, color="#5E5C5CFC", zorder=11, alpha=0.5)
     ax.vlines(-0.236, bottomZone, bottomZone+zoneHeight, color='#5E5C5CFC', zorder=11, alpha=0.5)
     ax.hlines(bottomZone+zoneHeight/3, -0.708, 0.708, color='#5E5C5CFC', zorder=11, alpha=0.5)
@@ -132,6 +136,15 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
     for pitch, color in pitch_colors.items():
         pitch_named = filtered_data[filtered_data['pitch_name'] == pitch]
         total_pitches = len(pitch_named)
+        if total_pitches > 0:
+            hits = filtered_data[
+                (filtered_data['events'].isin(['single', 'double', 'triple', 'home_run'])) &
+                (filtered_data['pitch_name'] == pitch)
+            ]
+            hit_percent = len(hits) / total_pitches
+        else:
+            hit_percent = 0
+            
 
         legend_handles.append(
             plt.Line2D([0], [0], 
@@ -139,7 +152,7 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
                 color='w', 
                 markerfacecolor= color, 
                 markersize=10, 
-                label=(f"{pitch} : {total_pitches}")
+                label=(f"{pitch} : {total_pitches} | hit%: {hit_percent:.3f}")
             )
         )
 
@@ -153,8 +166,8 @@ def plot_data(data, date, pitch_type, pitch_call, pitch_result, pitcher_hand):
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black',markersize=10, label=f"Pitcher-Handedness: {pitcher_hand}")
     ]
     ax.scatter(filtered_data['plate_x'], filtered_data['plate_z'], marker='o', s=207, linewidth=0.5, edgecolor=pSide, c=colors, zorder=5, picker=True)
-    legend1 = ax.legend(handles=legend_handles, loc='center left', bbox_to_anchor=(1, 0.5))
-    legend2 = ax.legend(handles=legend_handles2, loc='center right', bbox_to_anchor=(-0.1, 0.5))
+    legend1 = ax.legend(handles=legend_handles, loc='center left', bbox_to_anchor=(1, 0.5), fontsize='13')
+    legend2 = ax.legend(handles=legend_handles2, loc='center right', bbox_to_anchor=(-0.1, 0.5), fontsize='13')
     ax.add_artist(legend1)
     ax.add_artist(legend2)
     ax.grid(True, zorder=1)
